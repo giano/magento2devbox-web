@@ -1,6 +1,6 @@
-FROM php:7.0.16-fpm
+FROM php:7.2-fpm
 
-MAINTAINER "Magento"
+MAINTAINER "Xantek"
 
 ENV PHP_EXTRA_CONFIGURE_ARGS="--enable-fpm --with-fpm-user=magento2 --with-fpm-group=magento2"
 
@@ -13,10 +13,11 @@ RUN apt-get update && apt-get install -y \
     curl \
     libmcrypt-dev \
     libicu-dev \
-    libxml2-dev libxslt1-dev \
+    libxml2-dev \
+    libxslt1-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
-    libpng12-dev \
+    libpng-dev \
     git \
     vim \
     openssh-server \
@@ -24,6 +25,7 @@ RUN apt-get update && apt-get install -y \
     mysql-client \
     ocaml \
     expect \
+    gnupg2 \
     && curl -L https://github.com/bcpierce00/unison/archive/2.48.4.tar.gz | tar zxv -C /tmp && \
              cd /tmp/unison-2.48.4 && \
              sed -i -e 's/GLIBC_SUPPORT_INOTIFY 0/GLIBC_SUPPORT_INOTIFY 1/' src/fsmonitor/linux/inotify_stubs.c && \
@@ -32,8 +34,19 @@ RUN apt-get update && apt-get install -y \
              cd /root && rm -rf /tmp/unison-2.48.4 \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-configure hash --with-mhash \
-    && docker-php-ext-install -j$(nproc) mcrypt intl xsl gd zip pdo_mysql opcache soap bcmath json iconv \
+    && docker-php-ext-install -j$(nproc) \
+    intl \
+    xsl \
+    gd \
+    zip \
+    pdo_mysql \
+    opcache \
+    soap \
+    bcmath \
+    json \
+    iconv \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && pecl install mcrypt-1.0.2 && docker-php-ext-enable mcrypt \
     && pecl install xdebug && docker-php-ext-enable xdebug \
     && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
@@ -43,10 +56,15 @@ RUN apt-get update && apt-get install -y \
     && echo "xdebug.max_nesting_level=1000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && chmod 666 /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && mkdir /var/run/sshd \
-    && apt-get clean && apt-get update && apt-get install -y nodejs \
-    && ln -s /usr/bin/nodejs /usr/bin/node \
+    && apt-get purge nodejs \
+    && curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash - \
+    && apt-get clean \
+    && apt-get -y update \
+    && apt-get install -y nodejs \
     && apt-get install -y npm \
-    && npm update -g npm && npm install -g grunt-cli && npm install -g gulp \
+    && npm update -g npm \
+    && npm install -g grunt-cli \
+    && npm install -g gulp \
     && echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config \
     && apt-get install -y apache2 \
     && a2enmod rewrite \
