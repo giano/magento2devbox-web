@@ -2,7 +2,7 @@
 root = /home/magento2
 root = /var/www
 
-# Paths to synchronize 
+# Paths to synchronize
 path = magento2
 path = magento2
 

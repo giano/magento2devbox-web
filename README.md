@@ -1,6 +1,6 @@
 # Intro
 
-This repository is part of Magento DevBox, a simple way to install a Magento 2 development environment. 
+This repository is part of Magento DevBox, a simple way to install a Magento 2 development environment.
 The repository contains a Dockerfile for the Web container which includes Apache web server, PHP and a set of scripts to install Magento. The repository is used to automatically create an image https://hub.docker.com/r/magento/magento2devbox-web/, which is used for creating the development environment which you can create here https://magento.com/tech-resources/download.
 
 # Comments, questions, bug reports, contributions?
@@ -9,13 +9,13 @@ Please use GitHub issue/pull request features to ask questions, reports bugs or 
 
 # What hosts are supported?
 
-* 64-bit Windows 10 Pro, Enterprise and Education (1511 November update, Build 10586 or later) 
+* 64-bit Windows 10 Pro, Enterprise and Education (1511 November update, Build 10586 or later)
 * Mac OS 10.10.3 "Yosemite" or later
 
 # My site doesn't work after restart
 
 Docker assigns a random free port to the container on restart. Run the m2devbox-reset script to reinitialize containers to use the proper port.
- 
+
 # Why do you use a script to generate the container files?
 
 Using a script helps us provide a unique name for the containers, which allows you to run multiple sets of containers on one host. The script wraps the commands and also enables containers to run without conflict.
