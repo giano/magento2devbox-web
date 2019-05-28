@@ -1,8 +1,8 @@
 FROM php:7.2-fpm
 
-MAINTAINER "Xantek"
+MAINTAINER "Giano"
 
-ENV PHP_EXTRA_CONFIGURE_ARGS="--enable-fpm --with-fpm-user=magento2 --with-fpm-group=magento2"
+ENV PHP_EXTRA_CONFIGURE_ARGS="--enable-pcntl --enable-sockets --enable-fpm --with-fpm-user=magento2 --with-fpm-group=magento2"
 
 RUN apt-get update && apt-get install -y \
     apt-utils \
@@ -41,6 +41,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     pdo_mysql \
     opcache \
+    sockets \
+    pcntl \
     soap \
     bcmath \
     json \
@@ -147,5 +149,9 @@ EXPOSE 80 22 5000 44100
 WORKDIR /home/magento2
 
 USER root
+
+COPY ./local/. /usr/local
+
+RUN chown -R root /usr/local
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

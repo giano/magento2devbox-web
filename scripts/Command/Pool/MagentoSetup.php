@@ -48,13 +48,16 @@ class MagentoSetup extends AbstractCommand
         $magentoBackendPath = $this->requestOption(MagentoOptions::BACKEND_PATH, $input, $output);
         $magentoAdminUser = $this->requestOption(MagentoOptions::ADMIN_USER, $input, $output);
         $magentoAdminPassword = $this->requestOption(MagentoOptions::ADMIN_PASSWORD, $input, $output);
+        $language = $this->requestOption(MagentoOptions::LANGUAGE, $input, $output);
+        $currency = $this->requestOption(MagentoOptions::CURRENCY, $input, $output);
+        $timezone = $this->requestOption(MagentoOptions::TIMEZONE, $input, $output);
 
         $command = sprintf(
             'cd %s && php bin/magento setup:install'
                 . ' --base-url=http://%s:%s/ --db-host=%s --db-name=%s'
                 . ' --db-user=%s --db-password=%s --admin-firstname=Magento --admin-lastname=User'
                 . ' --admin-email=user@example.com --admin-user=%s --admin-password=%s'
-                . ' --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1'
+                . ' --language=%s --currency=%s--timezone=%s --use-rewrites=1'
                 . ' --backend-frontname=%s',
             $magentoPath,
             $magentoHost,
@@ -65,6 +68,9 @@ class MagentoSetup extends AbstractCommand
             $input->getOption(DbOptions::PASSWORD),
             $magentoAdminUser,
             $magentoAdminPassword,
+            $language,
+            $currency,
+            $timezone,
             $magentoBackendPath
         );
 
